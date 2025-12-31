@@ -32,6 +32,10 @@
     // "noFallthroughCasesInSwitch": true,
     // "noPropertyAccessFromIndexSignature": true,
 
+    // Mine
+    "allowImportingTsExtensions": true,
+    "emitDeclarationOnly": true,
+
     // Recommended Options
     "strict": true,
     "esModuleInterop": true,
@@ -42,6 +46,6 @@
     "moduleDetection": "force",
     "skipLibCheck": true
   },
-  "include": ["src"],
+  "include": ["src", "jest.config.js", "tests"],
   "exclude": ["node_modules", "dist"]
 }
