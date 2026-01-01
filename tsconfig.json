@@ -13,7 +13,7 @@
 
     // For nodejs:
     "lib": ["esnext"],
-    "types": ["node"],
+    "types": ["node", "jest"],
 
     // Other Outputs
     "sourceMap": true,
@@ -46,6 +46,6 @@
     "moduleDetection": "force",
     "skipLibCheck": true
   },
-  "include": ["src", "jest.config.js", "tests"],
+  "include": ["src"],
   "exclude": ["node_modules", "dist"]
 }

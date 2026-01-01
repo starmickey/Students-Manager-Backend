@@ -1,4 +1,4 @@
-import { initExpress } from "./app.ts";
+import { initExpress } from "./app/index.ts";
 import { loadEnv } from "./config/env.ts";
 import { initLogger } from "./config/logger.ts";
 
