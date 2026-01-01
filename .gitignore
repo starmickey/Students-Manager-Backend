@@ -1,3 +1,14 @@
+# Node.js dependencies (installed via npm / pnpm / yarn)
 node_modules/
-/generated/prisma
+
+# Compiled output (TypeScript → JavaScript)
+dist/
+
+# Prisma generated client (can be regenerated)
+generated/prisma/
+
+# Environment variables (secrets & local config)
 *.env
+
+# Application logs (runtime artifacts)
+*.log

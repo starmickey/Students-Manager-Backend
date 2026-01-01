@@ -9,12 +9,15 @@ const envSchema = z.object({
       (value) => Number.isInteger(value) && value > 0,
       "PORT must be a valid positive number"
     ),
+
+  NODE_ENV: z.enum(["development", "test", "production"]),
 });
 
 class Env {
   private static instance: Env;
 
   public readonly PORT: number;
+  public readonly NODE_ENV: string;
 
   private constructor() {
     const parsed = envSchema.safeParse(process.env);
@@ -26,6 +29,7 @@ class Env {
     }
 
     this.PORT = parsed.data.PORT;
+    this.NODE_ENV = parsed.data.NODE_ENV;
   }
 
   public static getInstance(): Env {
