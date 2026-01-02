@@ -5,7 +5,7 @@ node_modules/
 dist/
 
 # Prisma generated client (can be regenerated)
-generated/prisma/
+src/generated/prisma/
 
 # Environment variables (secrets & local config)
 *.env

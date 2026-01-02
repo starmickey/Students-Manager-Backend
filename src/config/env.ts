@@ -2,6 +2,8 @@ import { z } from "zod";
 import "dotenv/config";
 
 const envSchema = z.object({
+  DATABASE_URL: z.string(),
+  NODE_ENV: z.enum(["development", "test", "production"]),
   PORT: z
     .string()
     .transform(Number)
@@ -10,14 +12,14 @@ const envSchema = z.object({
       "PORT must be a valid positive number"
     ),
 
-  NODE_ENV: z.enum(["development", "test", "production"]),
 });
 
 class Env {
   private static instance: Env;
 
-  public readonly PORT: number;
+  public readonly DATABASE_URL: string;
   public readonly NODE_ENV: string;
+  public readonly PORT: number;
 
   private constructor() {
     const parsed = envSchema.safeParse(process.env);
@@ -28,8 +30,9 @@ class Env {
       throw new Error("Invalid environment configuration");
     }
 
-    this.PORT = parsed.data.PORT;
+    this.DATABASE_URL = parsed.data.DATABASE_URL;
     this.NODE_ENV = parsed.data.NODE_ENV;
+    this.PORT = parsed.data.PORT;
   }
 
   public static getInstance(): Env {

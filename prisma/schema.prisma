@@ -6,7 +6,7 @@
 
 generator client {
   provider = "prisma-client"
-  output   = "../generated/prisma"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -24,7 +24,7 @@ model Child {
   name        String
   surname     String
   birthDay    DateTime?
-  dni         String? 
+  dni         String?
   address     String?
   createdDate DateTime  @default(now())
   updateDate  DateTime  @default(now())
