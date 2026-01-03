@@ -1,7 +1,9 @@
 import { prisma } from "../../config/prisma.ts";
-import type { CreateChildInput } from "./children.schema.ts";
+import type { Prisma } from "../../generated/prisma/browser.ts";
+import type { Child } from "../../generated/prisma/client.ts";
+import type { CreateChildInput, GetChildListInput } from "./children.schema.ts";
 
-export function createChild(payload: CreateChildInput) {
+export function createChild(payload: CreateChildInput): Promise<Child> {
   return prisma.child.create({
     data: {
       name: payload.name,
@@ -11,4 +13,24 @@ export function createChild(payload: CreateChildInput) {
       address: payload.address ?? null,
     },
   });
+}
+
+export async function findChildren({
+  page,
+  pageSize,
+  sortBy = "name",
+  order = "asc",
+}: GetChildListInput): Promise<Child[]> {
+  const skip = (page - 1) * pageSize;
+  const take = pageSize;
+
+  return prisma.child.findMany({
+    skip,
+    take,
+    orderBy: { [sortBy]: order },
+  });
+}
+
+export function countChildren(where?: Prisma.ChildWhereInput) {
+  return prisma.child.count({ ...(where && { where }) });
 }
