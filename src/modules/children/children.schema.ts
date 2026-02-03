@@ -8,22 +8,33 @@ export const createChildSchema = z.object({
     .string("Surname must be a valid string")
     .min(1, "Surname cannot be empty"),
 
-  birthDay: z.coerce.date("Birth date must be a valid date").optional(),
+  birthDay: z.coerce
+    .date("Birth date must be a valid date")
+    .nullable()
+    .optional()
+    .default(null),
 
   dni: z
     .string("DNI must be a text value")
     .min(6, "DNI must have at least 6 characters")
-    .optional(),
+    .nullable()
+    .optional()
+    .default(null),
 
-  address: z.string("Address must be a text value").optional(),
+  address: z
+    .string("Address must be a text value")
+    .nullable()
+    .optional()
+    .default(null),
 });
 
 export const registerChildSchema = createChildSchema;
 
 export const getChildrenListSchema = querySchema;
 
-export const updateChildSchema = z
+export const patchChildSchema = z
   .object({
+    id: z.coerce.number().int().positive(),
     name: z.string().min(1).optional(),
     surname: z.string().min(1).optional(),
     birthDay: z.coerce.date().nullable().optional(),
@@ -36,6 +47,10 @@ export const updateChildSchema = z
     "At least one field must be provided"
   );
 
+export const updateChildSchema = registerChildSchema.extend({
+  id: z.coerce.number().int().positive(),
+});
+
 export const getChildByIdSchema = z.object({
   id: z.coerce.number().int().positive(),
 });
@@ -43,5 +58,6 @@ export const getChildByIdSchema = z.object({
 export type CreateChildInput = z.infer<typeof createChildSchema>;
 export type RegisterChildInput = z.infer<typeof registerChildSchema>;
 export type GetChildListInput = z.infer<typeof getChildrenListSchema>;
+export type PatchChildInput = z.infer<typeof patchChildSchema>;
 export type UpdateChildInput = z.infer<typeof updateChildSchema>;
 export type GetChildByIdInput = z.infer<typeof getChildByIdSchema>;
