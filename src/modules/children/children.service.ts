@@ -8,6 +8,7 @@ import {
   findChildren,
   countChildren,
   updateChildRepo,
+  findChildById,
 } from "./children.repository.ts";
 import { toChildDTO, toChildDTOList, type ChildDTO } from "./children.dto.ts";
 
@@ -35,4 +36,9 @@ export async function getChildren(
   ]);
 
   return { children: toChildDTOList(children), total };
+}
+
+export async function getChildById(id: number): Promise<ChildDTO | null> {
+  const child = await findChildById(id);
+  return child ? toChildDTO(child) : null;
 }

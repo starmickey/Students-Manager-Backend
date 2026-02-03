@@ -53,3 +53,9 @@ export async function findChildren({
 export function countChildren(where?: Prisma.ChildWhereInput) {
   return prisma.child.count({ ...(where && { where }) });
 }
+
+export function findChildById(id: number): Promise<Child | null> {
+  return prisma.child.findUnique({
+    where: { id },
+  });
+}

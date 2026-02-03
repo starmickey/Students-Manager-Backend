@@ -36,7 +36,12 @@ export const updateChildSchema = z
     "At least one field must be provided"
   );
 
+export const getChildByIdSchema = z.object({
+  id: z.coerce.number().int().positive(),
+});
+
 export type CreateChildInput = z.infer<typeof createChildSchema>;
 export type RegisterChildInput = z.infer<typeof registerChildSchema>;
 export type GetChildListInput = z.infer<typeof getChildrenListSchema>;
 export type UpdateChildInput = z.infer<typeof updateChildSchema>;
+export type GetChildByIdInput = z.infer<typeof getChildByIdSchema>;

@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
-import { getChildren, registerChild, updateChild } from "./children.service.ts";
+import { getChildById, getChildren, registerChild, updateChild } from "./children.service.ts";
 import {
+  getChildByIdSchema,
   getChildrenListSchema,
   registerChildSchema,
   updateChildSchema,
@@ -46,4 +47,17 @@ export async function getChildrenController(req: Request, res: Response) {
   };
 
   res.json(response);
+}
+
+export async function getChildByIdController(req: Request, res: Response) {
+  const { id } = getChildByIdSchema.parse(req.params);
+
+  const child = await getChildById(id);
+
+  if (!child) {
+    res.status(404).json({ message: "Child not found" });
+    return;
+  }
+
+  res.json(child);
 }
