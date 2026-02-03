@@ -20,7 +20,7 @@ export const createChildSchema = z.object({
     .optional()
     .default(null),
 
-  dni: z
+  dni: z.coerce
     .string("DNI must be a text value")
     .min(6, "DNI must have at least 6 characters")
     .nullable()
@@ -44,7 +44,7 @@ export const patchChildSchema = z
     name: z.string().min(1).optional(),
     surname: z.string().min(1).optional(),
     birthDay: z.coerce.date().nullable().optional(),
-    dni: z.string().min(6).nullable().optional(),
+    dni: z.coerce.string().min(6).nullable().optional(),
     address: z.string().nullable().optional(),
   })
   .strict()
