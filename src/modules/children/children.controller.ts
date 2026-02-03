@@ -5,39 +5,18 @@ import {
   registerChild,
   patchChild,
   updateChild,
+  deleteChild,
 } from "./children.service.ts";
 import {
   getChildByIdSchema,
   getChildrenListSchema,
-  registerChildSchema,
+  createChildSchema,
   patchChildSchema,
   updateChildSchema,
+  deleteChildSchema,
 } from "./children.schema.ts";
 import type { PaginatedResponse } from "../../shared/contracts/paginated-response.ts";
 import type { ChildDTO } from "./children.dto.ts";
-
-export async function registerChildController(req: Request, res: Response) {
-  const parsed = registerChildSchema.parse(req.body);
-  const child = await registerChild(parsed);
-
-  res.status(201).json(child);
-}
-
-export async function updateChildController(req: Request, res: Response) {
-  const parsed = updateChildSchema.parse({ ...req.params, ...req.body });
-
-  const child = await updateChild(parsed);
-
-  res.json(child);
-}
-
-export async function patchChildController(req: Request, res: Response) {
-  const parsed = patchChildSchema.parse({ ...req.params, ...req.body });
-
-  const child = await patchChild(parsed);
-
-  res.json(child);
-}
 
 export async function getChildrenController(req: Request, res: Response) {
   const parsed = getChildrenListSchema.parse(req.query);
@@ -69,4 +48,35 @@ export async function getChildByIdController(req: Request, res: Response) {
   }
 
   res.json(child);
+}
+
+export async function registerChildController(req: Request, res: Response) {
+  const parsed = createChildSchema.parse(req.body);
+  const child = await registerChild(parsed);
+
+  res.status(201).json(child);
+}
+
+export async function updateChildController(req: Request, res: Response) {
+  const parsed = updateChildSchema.parse({ ...req.params, ...req.body });
+
+  const child = await updateChild(parsed);
+
+  res.json(child);
+}
+
+export async function patchChildController(req: Request, res: Response) {
+  const parsed = patchChildSchema.parse({ ...req.params, ...req.body });
+
+  const child = await patchChild(parsed);
+
+  res.json(child);
+}
+
+export async function deleteChildController(req: Request, res: Response) {
+  const parsed = deleteChildSchema.parse(req.params);
+
+  await deleteChild(parsed);
+
+  res.status(204).json({ message: "Removed succesfully" });
 }

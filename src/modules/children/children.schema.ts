@@ -1,6 +1,12 @@
 import { z } from "zod";
 import { querySchema } from "../../shared/contracts/query.schema.ts";
 
+export const getChildrenListSchema = querySchema;
+
+export const getChildByIdSchema = z.object({
+  id: z.coerce.number().int().positive(),
+});
+
 export const createChildSchema = z.object({
   name: z.string("Name must be a valid string").min(1, "Name cannot be empty"),
 
@@ -28,9 +34,9 @@ export const createChildSchema = z.object({
     .default(null),
 });
 
-export const registerChildSchema = createChildSchema;
-
-export const getChildrenListSchema = querySchema;
+export const updateChildSchema = createChildSchema.extend({
+  id: z.coerce.number().int().positive(),
+});
 
 export const patchChildSchema = z
   .object({
@@ -47,17 +53,13 @@ export const patchChildSchema = z
     "At least one field must be provided"
   );
 
-export const updateChildSchema = registerChildSchema.extend({
+export const deleteChildSchema = z.object({
   id: z.coerce.number().int().positive(),
 });
 
-export const getChildByIdSchema = z.object({
-  id: z.coerce.number().int().positive(),
-});
-
-export type CreateChildInput = z.infer<typeof createChildSchema>;
-export type RegisterChildInput = z.infer<typeof registerChildSchema>;
-export type GetChildListInput = z.infer<typeof getChildrenListSchema>;
-export type PatchChildInput = z.infer<typeof patchChildSchema>;
-export type UpdateChildInput = z.infer<typeof updateChildSchema>;
 export type GetChildByIdInput = z.infer<typeof getChildByIdSchema>;
+export type GetChildListInput = z.infer<typeof getChildrenListSchema>;
+export type CreateChildInput = z.infer<typeof createChildSchema>;
+export type UpdateChildInput = z.infer<typeof updateChildSchema>;
+export type PatchChildInput = z.infer<typeof patchChildSchema>;
+export type DeleteChildInput = z.infer<typeof deleteChildSchema>;

@@ -1,8 +1,9 @@
 import type {
   GetChildListInput,
-  RegisterChildInput,
+  CreateChildInput,
   PatchChildInput,
   UpdateChildInput,
+  DeleteChildInput,
 } from "./children.schema.ts";
 import {
   createChild,
@@ -11,12 +12,33 @@ import {
   patchChildRepo,
   findChildById,
   updateChildRepo,
+  deleteChildRepo,
 } from "./children.repository.ts";
 import { toChildDTO, toChildDTOList, type ChildDTO } from "./children.dto.ts";
 import { NotFoundError } from "../../shared/errors/errors.ts";
 
+export async function getChildren(
+  params: GetChildListInput
+): Promise<{ children: ChildDTO[]; total: number }> {
+  const [children, total] = await Promise.all([
+    findChildren(params),
+    countChildren(),
+  ]);
+
+  return { children: toChildDTOList(children), total };
+}
+
+export async function getChildById(id: number): Promise<ChildDTO | null> {
+  const child = await findChildById(id);
+  if (!child) {
+    throw NotFoundError("Child not found");
+  }
+
+  return toChildDTO(child);
+}
+
 export async function registerChild(
-  input: RegisterChildInput
+  input: CreateChildInput
 ): Promise<ChildDTO> {
   const child = await createChild(input);
   return toChildDTO(child);
@@ -42,22 +64,11 @@ export async function patchChild(input: PatchChildInput): Promise<ChildDTO> {
   return toChildDTO(child);
 }
 
-export async function getChildren(
-  params: GetChildListInput
-): Promise<{ children: ChildDTO[]; total: number }> {
-  const [children, total] = await Promise.all([
-    findChildren(params),
-    countChildren(),
-  ]);
-
-  return { children: toChildDTOList(children), total };
-}
-
-export async function getChildById(id: number): Promise<ChildDTO | null> {
-  const child = await findChildById(id);
-  if (!child) {
+export async function deleteChild({ id }: DeleteChildInput) {
+  const exists = await findChildById(id);
+  if (!exists) {
     throw NotFoundError("Child not found");
   }
 
-  return toChildDTO(child);
+  await deleteChildRepo(id);
 }
