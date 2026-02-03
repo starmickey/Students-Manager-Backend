@@ -12,3 +12,6 @@ src/generated/prisma/
 
 # Application logs (runtime artifacts)
 *.log
+
+# VS Code
+.vscode

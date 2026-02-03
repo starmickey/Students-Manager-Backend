@@ -1,17 +1,32 @@
 import type { Request, Response } from "express";
-import { getChildren, registerChild } from "./children.service.ts";
+import { getChildren, registerChild, updateChild } from "./children.service.ts";
 import {
   getChildrenListSchema,
   registerChildSchema,
+  updateChildSchema,
 } from "./children.schema.ts";
 import type { PaginatedResponse } from "../../shared/contracts/paginated-response.ts";
 import type { ChildDTO } from "./children.dto.ts";
+import { BadRequestError } from "../../shared/errors/errors.ts";
 
 export async function registerChildController(req: Request, res: Response) {
   const parsed = registerChildSchema.parse(req.body);
   const child = await registerChild(parsed);
 
   res.status(201).json(child);
+}
+
+export async function updateChildController(req: Request, res: Response) {
+  const id = Number(req.params.id);
+  if (Number.isNaN(id)) {
+    throw BadRequestError("Invalid id");
+  }
+
+  const parsed = updateChildSchema.parse(req.body);
+
+  const child = await updateChild(id, parsed);
+
+  res.json(child);
 }
 
 export async function getChildrenController(req: Request, res: Response) {

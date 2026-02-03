@@ -1,7 +1,11 @@
 import { prisma } from "../../config/prisma.ts";
 import type { Prisma } from "../../generated/prisma/browser.ts";
 import type { Child } from "../../generated/prisma/client.ts";
-import type { CreateChildInput, GetChildListInput } from "./children.schema.ts";
+import type {
+  CreateChildInput,
+  GetChildListInput,
+  UpdateChildInput,
+} from "./children.schema.ts";
 
 export function createChild(payload: CreateChildInput): Promise<Child> {
   return prisma.child.create({
@@ -12,6 +16,21 @@ export function createChild(payload: CreateChildInput): Promise<Child> {
       dni: payload.dni ?? null,
       address: payload.address ?? null,
     },
+  });
+}
+
+export function updateChildRepo(id: number, data: UpdateChildInput) {
+  const cleanData = {
+    ...(typeof data.name !== "undefined" && { name: data.name }),
+    ...(typeof data.surname !== "undefined" && { surname: data.surname }),
+    ...(typeof data.birthDay !== "undefined" && { birthDay: data.birthDay }),
+    ...(typeof data.dni !== "undefined" && { dni: data.dni }),
+    ...(typeof data.address !== "undefined" && { address: data.address }),
+  };
+
+  return prisma.child.update({
+    where: { id },
+    data: cleanData,
   });
 }
 

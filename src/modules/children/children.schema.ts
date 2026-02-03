@@ -22,6 +22,21 @@ export const registerChildSchema = createChildSchema;
 
 export const getChildrenListSchema = querySchema;
 
+export const updateChildSchema = z
+  .object({
+    name: z.string().min(1).optional(),
+    surname: z.string().min(1).optional(),
+    birthDay: z.coerce.date().nullable().optional(),
+    dni: z.string().min(6).nullable().optional(),
+    address: z.string().nullable().optional(),
+  })
+  .strict()
+  .refine(
+    (data) => Object.keys(data).length > 0,
+    "At least one field must be provided"
+  );
+
 export type CreateChildInput = z.infer<typeof createChildSchema>;
 export type RegisterChildInput = z.infer<typeof registerChildSchema>;
 export type GetChildListInput = z.infer<typeof getChildrenListSchema>;
+export type UpdateChildInput = z.infer<typeof updateChildSchema>;
